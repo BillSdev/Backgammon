@@ -2,8 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
-public class DiceAnimation extends Animation{
-
+public class DiceAnimation extends Animation {
 	private int dice1;
 	private int dice2;
 	int diceSize;
@@ -51,7 +50,7 @@ public class DiceAnimation extends Animation{
 			}
 		}
 	}
-	//yeah weird and repetitive but what ever
+	
 	public static void drawDice(int x, int y, int diceSize, int num, Graphics2D g) {
 		if(num < 1 || num > 6)
 			return;
