@@ -10,7 +10,6 @@ import javax.swing.*;
 
 public class Main2 extends JPanel implements Runnable, MouseListener {
     
-	//decided to include the menu code in the main, bad implementation but I am dont with this project anyways
 	
 	public static final int FPS = 30;
 	public static final int WIDTH = 18 * 60;
@@ -87,7 +86,7 @@ public class Main2 extends JPanel implements Runnable, MouseListener {
 			game.update();
 	}
 
-	public void draw(Graphics2D g) {                //implement animation using a whileloop that wont allow the thread to continue 
+	public void draw(Graphics2D g) {                
 		if(inMenu) {
 			drawMenu(g);
 		}
