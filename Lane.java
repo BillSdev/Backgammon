@@ -20,7 +20,7 @@ public class Lane {
 	private Color laneColor;                //color of lane
 	private boolean selected;
 	private int currentChecker;             //follow which checker to select\move
-	private boolean isHighlighted;          //if mouse on lane + possible move;
+	private boolean isHighlighted;          //if can move to this lane;
 
 	public Lane(int x, int y, int width, int height, int partOfBoard, Color laneColor, int number) {
 		this.x = x;
