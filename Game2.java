@@ -8,10 +8,6 @@ import java.util.Collections;
 import java.util.Stack;
 
 public class Game2 {
-	//current setup : black rolls 1 and 2 , array out of bounds on line 314
-	//Using a list array was a mistake.  yeah you can easily add and remove but the con of having the rolls and numbers scramble
-	//is a crazy drag and was not worth it... a better idea would be to use an array. a negative would indicate a used move.
-	//add some helper methods for isEmpty or contains(int) and it would work like a charm... but too l8 for that now i guess.
 	private Main2 main;
 	public static final int WHITE_CHECKER = 0;
 	public static final int BLACK_CHECKER = 1;
@@ -21,10 +17,10 @@ public class Game2 {
 	private int xOffSet;
 	private int yOffSet;
 	private ArrayList<Integer> moveList;
-	private int[] checkersToInsert;  //first element is whites to insert second element is black to insert. easy access through the constants.
+	private int[] checkersToInsert;   //first element is whites to insert second element is black to insert. access through the constants.
 	private Lane[] lanes;
 	private Lane selectedLane;
-	private Lane tempSelectedLane;     //disgusting and lazy fix to some problems.
+	private Lane tempSelectedLane;     //lazy fix to some problems.
 	private int playingChecker;
 	private BackButton backButton;
 	private ConfirmButton confirmButton;
@@ -37,10 +33,10 @@ public class Game2 {
 	private boolean couldntMove;
 	//private int[] numbersRolled;
 	//private boolean rollingDice;
-	private Stack<int[]> backMoves; //first number is number of from lane , second num to lane, third if a piece was captured in from lane (0 - no , 1 - yes, -1 = bear off info). 
+	private Stack<int[]> backMoves;    //first number is number of from-lane , second num to-lane, third if a piece was captured in from lane (0 - no , 1 - yes, -1 = bear off info). 
 	private final int BACK_FROM = 0;   //number of the lane we go back from.
 	private final int BACK_TO = 1;     //number of lane we come back to
-	private final int BACK_INFO = 2;  //additional info.  0 - nothing special , 1 - a piece was captures on from lane. 2 - a bear off was done.
+	private final int BACK_INFO = 2;  //additional info.  0 - nothing special , 1 - a piece was captures on from-lane. 2 - a bear off was done.
 	private int[][] setup = {{2,0}, {0,0}, {0,0}, {0,0}, {0,0}, {5,1}, {0,0}, {3,1}, {0,0}, {0,0}, {0,0}, {5,0}, 
 			{5,1}, {0,0}, {0,0}, {0,0}, {3,0}, {0,0}, {5,0}, {0,0}, {0,0}, {0,0}, {0,0}, {2,1}};
 
@@ -63,7 +59,7 @@ public class Game2 {
 		animationList = new ArrayList<Animation>();
 		//checkersToInsert = new int[2];
 		checkersToInsert = new int[] {0, 0};
-		checkersToBearOff = new int[]{15, 15};    //later make a variable or a 2 element array that will holding the num of starting chekcers for both colors.
+		checkersToBearOff = new int[]{15, 15};    
 		playing = true;
 		backButton = new BackButton(Main2.WIDTH-(int)(xOffSet*0.5)-30, yOffSet + BOARD_HEIGHT/2-15, 30, 30, this);
 		confirmButton = new ConfirmButton((int)(xOffSet*1.5) + BOARD_WIDTH, yOffSet + BOARD_HEIGHT/2-16, 30, 30, this);
@@ -89,7 +85,7 @@ public class Game2 {
 		}
 		//choosing who starts;
 		playingChecker = (int)(Math.random()*2);
-		playingChecker = 1; //force white to start for debugging purposes.
+		//playingChecker = 1; //force white to start for debugging purposes.
 		String chosenChecker = "White";
 		if(playingChecker == BLACK_CHECKER)
 			chosenChecker = "Black";
@@ -139,9 +135,9 @@ public class Game2 {
 				captured = 1;
 				removedC = to.getCurrentChecker();
 				to.removeChecker();
-				if(!notTesting)         //if animation breaks shit, delete this if *line* the all of the else statement
+				if(!notTesting)         
 					checkersToInsert[-playingChecker + 1]++;
-				else {    //animation related bs, the increment of checkerToInsert will take place after the animation is over in update()
+				else {    
 					int xDest = xOffSet+BOARD_WIDTH/2-lanes[0].getCheckerRadius();
 					int yDest = yOffSet-lanes[0].getCheckerRadius() + (int)(BOARD_HEIGHT*0.25) + (int)(BOARD_HEIGHT*0.5)*(playingChecker);
 					animationList.add(new CheckerAnimation(removedC.x, removedC.y, xDest, yDest, to.getCheckerRadius(), -playingChecker + 1, to, null, checkerMoveTime));
@@ -174,7 +170,7 @@ public class Game2 {
 	}
 
 	public void nextRound() {
-		if(!moveList.isEmpty()) { //shouldnt be possible but just in case
+		if(!moveList.isEmpty()) { 
 			moveList.clear();
 		}
 		backMoves.clear();
@@ -192,15 +188,13 @@ public class Game2 {
 		postRollAnimation();
 	}
 
-	public void postRollAnimation() {                //pointless method can just add the lines to the end of newRound() method.
+	public void postRollAnimation() {                
 		rollDice();
-		String chosenChecker = "white";               //print whos turn it is.
+		String chosenChecker = "white";               
 		if(playingChecker == BLACK_CHECKER)
 			chosenChecker = "black";
 		if(cantMove(playingChecker)) {
 			System.out.println("You cant move, skip turn.");
-			//animationList.add(new PopMessageAnimation("Cant move", xOffSet + BOARD_WIDTH/2, Main2.HEIGHT/2-25, 
-			//		xOffSet + BOARD_WIDTH/2, Main2.HEIGHT/2-25, 1500, Color.red));
 			couldntMove = true;
 		}
 		else 
@@ -294,7 +288,7 @@ public class Game2 {
 			if(!lanes[i].isEmpty() && lanes[i].getCheckerType() == pChecker) {
 				if(canBearOff(lanes[i]))
 					result = false;
-				for(int j = 0 ; j < moveList.size() ; j++) {   //if outOfBounds persists, make a new int var storing moveList.get(j)
+				for(int j = 0 ; j < moveList.size() ; j++) {   
 					if(i + moveList.get(j)*sign < 24 && i + moveList.get(j)*sign > -1) {
 						if(canMoveFromTo(lanes[i], lanes[i + moveList.get(j)*sign])) {
 							result = false;
@@ -480,7 +474,7 @@ public class Game2 {
 				}
 
 				animationList.remove(animationList.get(i));
-				i--;      //might get weird because we delete in mid loop so the array size gets smaller and shit and might get out of bounds or the order of the elements might get messed up.
+				i--;      //maybe use an iterator to avoid unexpected behaviors after deleting elements mid loop.
 			}
 		}
 
@@ -492,10 +486,10 @@ public class Game2 {
 
 		Collections.sort(moveList);
 		deHighlightLanes();
-		tempSelectedLane = selectedLane;        				 //fix cantMove test bug nulling the selected lane every run.
+		tempSelectedLane = selectedLane;        				    //fix cantMove-test bug nulling the selected lane every run.
 		if(!midAnimation && (moveList.size() == 0 || cantMove(playingChecker))) {   //ending the round by using cantMove() here is extremely inefficient 
-			confirmButton.activate();							 //but easy and doesnt mess this already messed up code as much.
-		}														 //plus decided to update which lane to highlight in cantMove()
+			confirmButton.activate();					    //but easy and doesnt mess this already messed up code as much.
+		}									    
 		selectedLane = tempSelectedLane;
 		if(selectedLane != null)
 			selectedLane.setSelected(true);
