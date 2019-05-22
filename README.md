@@ -10,3 +10,5 @@ The code itself is very subpar because I didnt plan on adding as many features a
 And as a result the code suffered from bad design and lack of proper modularity.
 
 Might come back to it in the near future and redesign it .
+
+Demo : https://youtu.be/R0ou0ofjLSE
